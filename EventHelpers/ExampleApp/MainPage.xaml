@@ -1,0 +1,69 @@
+﻿<Page x:Class="ExampleApp.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:events="using:EventHelpers"
+      xmlns:local="using:ExampleApp">
+    <Page.Resources>
+        <local:SuggestionsRequestedArgsConverter x:Key="SuggestionsRequestedArgsConverter" />
+    </Page.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Border Padding="20">
+            <StackPanel Margin="0,20,0,0">
+                <StackPanel.Resources>
+                    <Style TargetType="SearchBox">
+                        <Setter Property="Margin"
+                                Value="0,5,0,20" />
+
+                        <Setter Property="SearchHistoryEnabled"
+                                Value="False" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                           Text="Query properties" />
+                
+                <SearchBox events:SearchBoxQuerySubmitted.Command="{Binding QuerySubmitted}"
+                           QueryText="{Binding QueryText, Mode=TwoWay}" />
+
+
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                           Text="Suggestions" />
+
+                <SearchBox events:SearchBoxSuggestionsRequested.Command="{Binding SuggestionsRequested}"
+                           events:SearchBoxSuggestionsRequested.Source="{Binding Suggestions}"
+                           QueryText="{Binding QueryText, Mode=TwoWay}" />
+
+                
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                           Text="Grouped suggestions" />
+
+                <SearchBox events:SearchBoxSuggestionsRequested.Command="{Binding SuggestionsRequested}"
+                           events:SearchBoxSuggestionsRequested.Source="{Binding GroupedSuggestions}"
+                           QueryText="{Binding QueryText, Mode=TwoWay}" />
+
+                
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                           Text="Async suggestions" />
+
+                <SearchBox events:SearchBoxSuggestionsRequested.Command="{Binding SuggestionsRequestedAsync}"
+                           events:SearchBoxSuggestionsRequested.CommandParameter="{Binding Converter={StaticResource SuggestionsRequestedArgsConverter}}"
+                           events:SearchBoxSuggestionsRequested.Source="{Binding Suggestions}" />
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1"
+                Background="White">
+            <TextBlock FontFamily="Consolas"
+                       FontSize="14"
+                       Foreground="Black"
+                       Margin="0,40,0,0"
+                       Text="{Binding DebugText}" />
+        </Border>
+    </Grid>
+</Page>
